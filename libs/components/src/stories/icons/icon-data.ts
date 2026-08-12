@@ -29,6 +29,10 @@ const statusIndicators = [
     usage:
       "Indicates that the action is loading. Should only be used in nested components that require their own component-level loading state such as buttons.",
   },
+  {
+    id: "bwi-encrypted",
+    usage: "Indicates that the item is encrypted",
+  },
 ];
 
 const bitwardenObjects = [
@@ -67,12 +71,20 @@ const bitwardenObjects = [
     usage: "Indicates a folder.",
   },
   {
+    id: "bwi-shared-folder",
+    usage: "Indicates a shared folder.",
+  },
+  {
     id: "bwi-globe",
     usage: "Indicates a login item type.",
   },
   {
     id: "bwi-id-card",
     usage: "Indicates an identity item type.",
+  },
+  {
+    id: "bwi-passport",
+    usage: "Indicates a passport item type.",
   },
   {
     id: "bwi-premium",

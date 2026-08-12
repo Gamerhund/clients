@@ -158,6 +158,8 @@ export type OverlayBackgroundExtensionMessage = {
   styles?: Partial<CSSStyleDeclaration>;
   data?: LockedVaultPendingNotificationsData;
   filterValue?: string;
+  iframeSrc?: string;
+  iframeTargetedFields?: { selector: string; fieldType: string; formCategory?: string }[];
 } & OverlayAddNewItemMessage &
   CloseInlineMenuMessage &
   ToggleInlineMenuHiddenMessage &
@@ -217,6 +219,7 @@ export type InlineMenuCipherData = {
 export type BuildCipherDataParams = {
   inlineMenuCipherId: string;
   cipher: CipherView;
+  iconsServerUrl: string | null;
   showFavicons?: boolean;
   showInlineMenuAccountCreation?: boolean;
   hasPasskey?: boolean;
@@ -251,6 +254,7 @@ export type OverlayBackgroundExtensionMessageHandlers = {
   openAutofillInlineMenu: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<void>;
   getInlineMenuCardsVisibility: () => void;
   getInlineMenuIdentitiesVisibility: () => void;
+  getInlineMenuSshKeysVisibility: () => void;
   closeAutofillInlineMenu: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   checkAutofillInlineMenuFocused: ({ sender }: BackgroundSenderParam) => void;
   focusAutofillInlineMenuList: () => void;
@@ -278,6 +282,7 @@ export type OverlayBackgroundExtensionMessageHandlers = {
   bgSaveCipher: () => void;
   updateOverlayCiphers: () => void;
   fido2AbortRequest: ({ sender }: BackgroundSenderParam) => void;
+  routeTargetedFieldsToFrame: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
 };
 
 export type PortMessageParam = {

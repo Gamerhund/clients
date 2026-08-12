@@ -6,9 +6,11 @@ import { CipherView } from "../../vault/models/view/cipher.view";
 
 import { BankAccountExport } from "./bank-account.export";
 import { CardExport } from "./card.export";
+import { DriversLicenseExport } from "./drivers-license.export";
 import { FieldExport } from "./field.export";
 import { IdentityExport } from "./identity.export";
 import { LoginExport } from "./login.export";
+import { PassportExport } from "./passport.export";
 import { PasswordHistoryExport } from "./password-history.export";
 import { SecureNoteExport } from "./secure-note.export";
 import { SshKeyExport } from "./ssh-key.export";
@@ -27,7 +29,7 @@ export class CipherExport {
     return req;
   }
 
-  static toView(req: CipherExport, view = new CipherView()) {
+  static toView(req: CipherExport, view = new CipherView(), allowDerivedSshKeys = false) {
     view.type = req.type;
     view.folderId = req.folderId;
     if (view.organizationId == null) {
@@ -71,12 +73,22 @@ export class CipherExport {
       case CipherType.SshKey:
         if (req.sshKey != null) {
           // toView only returns undefined when req is null, which we've already checked
-          view.sshKey = SshKeyExport.toView(req.sshKey)!;
+          view.sshKey = SshKeyExport.toView(req.sshKey, undefined, allowDerivedSshKeys)!;
         }
         break;
       case CipherType.BankAccount:
         if (req.bankAccount != null) {
           view.bankAccount = BankAccountExport.toView(req.bankAccount)!;
+        }
+        break;
+      case CipherType.DriversLicense:
+        if (req.driversLicense != null) {
+          view.driversLicense = DriversLicenseExport.toView(req.driversLicense)!;
+        }
+        break;
+      case CipherType.Passport:
+        if (req.passport != null) {
+          view.passport = PassportExport.toView(req.passport)!;
         }
         break;
     }
@@ -139,6 +151,16 @@ export class CipherExport {
           domain.bankAccount = BankAccountExport.toDomain(req.bankAccount);
         }
         break;
+      case CipherType.DriversLicense:
+        if (req.driversLicense != null) {
+          domain.driversLicense = DriversLicenseExport.toDomain(req.driversLicense);
+        }
+        break;
+      case CipherType.Passport:
+        if (req.passport != null) {
+          domain.passport = PassportExport.toDomain(req.passport);
+        }
+        break;
     }
 
     if (req.passwordHistory != null) {
@@ -166,6 +188,8 @@ export class CipherExport {
   identity?: IdentityExport;
   sshKey?: SshKeyExport;
   bankAccount?: BankAccountExport;
+  driversLicense?: DriversLicenseExport;
+  passport?: PassportExport;
   reprompt: CipherRepromptType = CipherRepromptType.None;
   passwordHistory?: PasswordHistoryExport[];
   revisionDate?: Date;
@@ -211,6 +235,12 @@ export class CipherExport {
         break;
       case CipherType.BankAccount:
         this.bankAccount = new BankAccountExport(o.bankAccount);
+        break;
+      case CipherType.DriversLicense:
+        this.driversLicense = new DriversLicenseExport(o.driversLicense);
+        break;
+      case CipherType.Passport:
+        this.passport = new PassportExport(o.passport);
         break;
     }
 
